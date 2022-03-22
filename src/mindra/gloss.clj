@@ -19,24 +19,24 @@
   [angle1 angle2 radius]
   (sep "ArcSolid" angle1 angle2 radius))
 
-(defn bitmap
-  "A bitmap image from given filepath.
+(defn image
+  "An image from given filepath.
 
   Given filepath can point to a jpeg, png or bmp file.
 
   Images are stored in memory, indexed by filepath. If a filepath has already been
   loaded, mindra will use the corresponding image from its cache."
   [path]
-  (sep "Bitmap" (pr-str path)))
+  (sep "Image" (pr-str path)))
 
-(defn bitmap-section
-  "A subsection of a bitmap image starting from given x y location with given width and height.
+(defn image-section
+  "A subsection of an image starting from given x y location with given width and height.
 
-  Besides the subsection selection, should be similar to bitmap function. See docstring of
-  bitmap function for more details."
+  Besides the subsection selection, should be similar to image function. See docstring of
+  image function for more details."
   [x y width height path]
-  (sep "BitmapSection" x y width height
-       (bitmap path)))
+  (sep "ImageSection" x y width height
+       (image path)))
 
 (defn blank
   "A blank picture, with nothing in it."
@@ -60,23 +60,43 @@
 
 (defn line
   "A line along a list of points."
-  [& points]
+  [points]
   (sep "Line" (vstr points)))
+
+(defn line'
+  "Variadic version of line."
+  [& points]
+  (line points))
 
 (defn line-loop
   "A closed loop along a list of points."
-  [& points]
+  [points]
   (sep "LineLoop" (vstr points)))
+
+(defn line-loop'
+  "Variadic version of line-loop."
+  [& points]
+  (line-loop points))
 
 (defn pictures
   "A picture consisting of several others."
-  [& pics]
+  [pics]
   (str "[" (apply sep pics) "]"))
+
+(defn pictures'
+  "Variadic version of pictures."
+  [& pics]
+  (pictures pics))
 
 (defn polygon
   "A convex polygon along a list of points; filled with a solid color."
-  [& points]
+  [points]
   (sep "Polygon" (vstr points)))
+
+(defn polygon'
+  "Variadic version of polygon."
+  [& points]
+  (polygon points))
 
 (defn rectangle-solid
   "A solid rectangle centered about the origin."

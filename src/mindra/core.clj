@@ -5,8 +5,13 @@
 
             [babashka.process :as bp]))
 
-(def MINDRA-MODE-STATIC 0)
-(def MINDRA-MODE-INTERACTIVE 1)
+(def MINDRA-MODE-GLOSS-STATIC 0)
+(def MINDRA-MODE-GLOSS-INTERACTIVE 1)
+
+(defn print-and-raise-mindra-failure [tag body]
+  (println body)
+  (throw (AssertionError.
+          (str "Unexpected message received from mindra, with tag '" tag "'."))))
 
 (defn read-message [^java.io.BufferedReader reader]
   (let [line (.readLine reader)]
@@ -69,7 +74,7 @@
                     (list "Diagrams" "SVG" width height)))))
 
 (defn handle-gloss-init-request [writer configuration]
-  (let [mode (:mode configuration MINDRA-MODE-STATIC)
+  (let [mode (:mode configuration MINDRA-MODE-GLOSS-STATIC)
         window (:window configuration)
         color (:background-color configuration)
         steps-per-second (:steps-per-second configuration 50)
@@ -143,12 +148,7 @@
           nil true
           "READY" (handle-svg-ready writer configuration diagram message-body)
           "SVG" true
-          (let []
-            (println message)
-
-            (throw (AssertionError. (str "Unexpected message received with tag '" tag "'"
-                                         \newline
-                                         (s/replace message "\\\"" "\""))))))
+          (print-and-raise-mindra-failure tag message-body))
         (if (and (not= tag "SVG") (.isAlive ^java.lang.Process (:proc p)))
           (recur (read-message reader))
           message-body)))))
@@ -166,7 +166,7 @@
                                                   :blue 255
                                                   :alpha 255}
                                :world->picture (constantly picture)
-                               :mode MINDRA-MODE-STATIC
+                               :mode MINDRA-MODE-GLOSS-STATIC
                                :no-event false
                                :no-step false}
         configuration (merge default-configuration provided-opts)
@@ -180,9 +180,7 @@
         (case tag
           nil true
           "READY" (handle-gloss-ready writer configuration world message-body)
-          (throw (AssertionError. (str "Unexpected message received with tag '" tag "'"
-                                       \newline
-                                       (s/replace message "\\\"" "\"")))))
+          (print-and-raise-mindra-failure tag message-body))
         (when (and (not= message-body "PHOTO") (.isAlive ^java.lang.Process (:proc p)))
           (recur (read-message reader)))))))
 
@@ -203,7 +201,7 @@
                                                   :blue 255
                                                   :alpha 255}
                                :steps-per-second 50
-                               :mode MINDRA-MODE-INTERACTIVE}
+                               :mode MINDRA-MODE-GLOSS-INTERACTIVE}
         configuration (merge default-configuration provided-opts)
         p (start-mindra-or-fail (:mindra-path configuration))
         reader (io/reader (:out p))
@@ -220,8 +218,6 @@
           (do
             (write-message writer "SHUTDOWN")
             (handle-shutdown writer configuration world)
-            (throw (AssertionError. (str "Unexpected message received with tag '" tag "'"
-                                         \newline
-                                         (s/replace message "\\\"" "\""))))))
+            (print-and-raise-mindra-failure tag message-body)))
         (when (and (not= tag "SHUTDOWN") (.isAlive ^java.lang.Process (:proc p)))
           (recur (read-message reader)))))))
