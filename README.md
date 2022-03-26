@@ -3,6 +3,82 @@
 A 2D graphics library for clojure using [mindra](https://github.com/rorokimdim/mindra) -- a cli for [diagrams](https://diagrams.github.io/)
 and [gloss](http://gloss.ouroborus.net/).
 
+# Installation
+
+**A.** Install mindra from [mindra-binary](https://github.com/rorokimdim/mindra#installation)
+
+If you encounter any problems, please file an issue.
+
+**B.** Set up a clojure project
+
+**Leiningen/Boot**
+
+```clojure
+[org.clojars.rorokimdim/mindra-clj "0.0.1"]
+```
+
+**deps.edn**
+
+```clojure
+org.clojars.rorokimdim/mindra-clj {:mvn/version "0.0.1"}
+```
+
+# Usage
+
+`mindra` has two set of functions (APIs): [one](https://github.com/rorokimdim/mindra-clj/blob/master/src/mindra/diagrams.clj) for diagrams and [another](https://github.com/rorokimdim/mindra-clj/blob/master/src/mindra/gloss.clj) for gloss. They are not intended to be used together: when creating a gloss picture, we should avoid using functions from the diagrams namespace, and vice versa.
+
+Try drawing a simple circle in a repl:
+
+**A circle using Diagrams**
+
+```clojure
+(require '[mindra.core :refer [diagram->svg]])
+(require '[mindra.diagrams :as md])
+
+(defn draw-circle [radius]
+  (let [svg (diagram->svg (md/circle radius))]
+    (spit "circle.svg" svg)))
+
+(draw-circle 100)
+```
+
+**A circle using Gloss**
+
+```clojure
+(require '[mindra.core :refer [gloss-draw]])
+(require '[mindra.gloss :as mg])
+
+(defn draw-circle [radius]
+  (let [picture (mg/circle radius)]
+    (gloss-draw picture)))
+
+(draw-circle 100)
+```
+
+Hit `ESC` to close the window. See [default-key-bindings](https://github.com/benl23x5/gloss#usage).
+
+# Q/A
+
+**A.** How does it compare with library x?
+
+tldr; I don't know yet or I may not have tried it.
+
+I wanted something like [htdp/image](https://docs.racket-lang.org/teachpack/2htdpimage.html), [2htdp/universe](https://docs.racket-lang.org/teachpack/2htdpuniverse.html) for clojure, without the pain (and required skillset) of building it myself. Leveraging diagrams and gloss, which I was already familiar with, seemed like the easiest solution.
+
+**B.** Why is the graphics not as smooth as in library x?
+
+`mindra` inherits all the tradeoffs made by `diagrams` and `gloss`, and all their deficiencies. It also has quirks of its own and, at this stage, probably plenty of bugs too.
+
+However, if you observe poorer graphics with `mindra` compared to diagrams/gloss, please file an issue.
+
+**C.** Will it support feature x?
+
+Please file an issue/feature-request.
+
+**D.** Babashka, GraalVM?
+
+As long as mindra binary is available, this library is expected to work in both! If it doesn't, please file an issue.
+
 # Examples
 
 ## Diagrams
