@@ -95,10 +95,8 @@ https://user-images.githubusercontent.com/929342/160048948-8acfbca6-63c7-4cfe-9a
 ## Credits
 
 0. [Clojure](https://clojure.org/)
-1. [Diagrams](https://diagrams.github.io/)
-2. [Gloss](https://hackage.haskell.org/package/gloss)
-3. [Mindra](https://github.com/rorokimdim/mindra)
-4. All of these [libraries](https://github.com/rorokimdim/mindra-clj/blob/master/project.clj)
+1. [Diagrams](https://diagrams.github.io/) and [Gloss](https://hackage.haskell.org/package/gloss)
+2. All of these [libraries](https://github.com/rorokimdim/mindra-clj/blob/master/project.clj)
 
 ## License
 
