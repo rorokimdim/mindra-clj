@@ -8,12 +8,16 @@
 (def MINDRA-MODE-GLOSS-STATIC 0)
 (def MINDRA-MODE-GLOSS-INTERACTIVE 1)
 
-(defn print-and-raise-mindra-failure [tag body]
+(defn print-and-raise-mindra-failure
+  "Prints and raises a failure message from mindra."
+  [tag body]
   (println body)
   (throw (AssertionError.
           (str "Unexpected message received from mindra, with tag '" tag "'."))))
 
-(defn read-message [^java.io.BufferedReader reader]
+(defn read-message
+  "Reads a message sent by mindra."
+  [^java.io.BufferedReader reader]
   (let [line (.readLine reader)]
     (if (nil? line)
       {}
@@ -26,6 +30,7 @@
           {:tag tag :body body})))))
 
 (defn write-message
+  "Writes a message to mindra's stdin."
   ([^java.io.BufferedWriter writer tag] (write-message writer tag nil))
   ([^java.io.BufferedWriter writer tag body]
    (if (nil? body)
@@ -34,37 +39,53 @@
    (.write writer (str \newline \newline))
    (.flush writer)))
 
-(defn default-exit-event? [event]
+(defn default-exit-event?
+  "Default predicate function to decide if an event is an exit-event.
+
+  ESC key is the default way to exit."
+  [event]
   (and (= (:name event) "EventKey")
        (= (first (:args event)) :specialKeyEsc)))
 
-(defn parse-event [message-body]
+(defn parse-event
+  "Parses an event message from mindra to a dict with :name and :args."
+  [message-body]
   (let [splits (s/split message-body #"\s+")
         event-name (first splits)
         event-args (map edn/read-string (rest splits))]
     {:name event-name
      :args event-args}))
 
-(defn handle-event [writer configuration world event]
+(defn handle-event
+  "Handles an event message sent by mindra."
+  [writer configuration world event]
   (if ((:exit-event? configuration) event)
     (write-message writer "SHUTDOWN")
     (do
       ((:on-event configuration) world event)
       (write-message writer "OK"))))
 
-(defn handle-step [writer configuration world message-body]
+(defn handle-step
+  "Handles a step message sent by mindra."
+  [writer configuration world message-body]
   (let [seconds (Float/parseFloat message-body)]
     ((:on-step configuration) world seconds)
     (write-message writer "OK")))
 
-(defn handle-picture-request [writer configuration world]
+(defn handle-picture-request
+  "Handles a picture request message sent by mindra."
+  [writer configuration world]
   (let [picture ((:world->picture configuration) world)]
     (write-message writer "PICTURE" picture)))
 
-(defn handle-svg-request [writer configuration svg]
+(defn handle-svg-request
+  "Handles a SVG request message sent by mindra."
+  [writer _configuration svg]
   (write-message writer "SVG" svg))
 
-(defn handle-svg-init-request [writer configuration]
+(defn handle-svg-init-request
+  "Handles initialization request from mindra for setting it up for SVG drawing."
+  [writer configuration]
   (let [width (:width configuration)
         height (:height configuration)]
     (write-message writer
@@ -73,7 +94,9 @@
                     " "
                     (list "Diagrams" "SVG" width height)))))
 
-(defn handle-gloss-init-request [writer configuration]
+(defn handle-gloss-init-request
+  "Handles initialization request from mindra for setting it up for Gloss."
+  [writer configuration]
   (let [mode (:mode configuration MINDRA-MODE-GLOSS-STATIC)
         window (:window configuration)
         color (:background-color configuration)
@@ -103,23 +126,31 @@
                           (when no-event "NoEvent")
                           (when no-step "NoStep"))))))
 
-(defn handle-shutdown [writer configuration world]
+(defn handle-shutdown
+  "Handles shutdown message from mindra."
+  [writer configuration world]
   ((:on-exit configuration) world)
   (write-message writer "OK"))
 
-(defn handle-gloss-ready [writer configuration world message-body]
+(defn handle-gloss-ready
+  "Handles ready message from mindra for Gloss."
+  [writer configuration world message-body]
   (case message-body
     "INIT" (handle-gloss-init-request writer configuration)
     "PICTURE" (handle-picture-request writer configuration world)
     (throw (AssertionError. (str "Unexpected READY message received: " message-body)))))
 
-(defn handle-svg-ready [writer configuration svg message-body]
+(defn handle-svg-ready
+  "Handles ready message from mindra for SVG drawings."
+  [writer configuration svg message-body]
   (case message-body
     "INIT" (handle-svg-init-request writer configuration)
     "SVG" (handle-svg-request writer configuration svg)
     (throw (AssertionError. (str "Unexpected READY message received: " message-body)))))
 
-(defn start-mindra-or-fail [path]
+(defn start-mindra-or-fail
+  "Starts mindra command from given command or fails with a helpful error message."
+  [path]
   (try
     (bp/process [path] {:shutdown bp/destroy})
     (catch java.io.IOException _
@@ -129,12 +160,21 @@
                       "Please install mindra and provide the correct path to it using :mindra-path option -- defaults to 'mindra'."))
         (System/exit 1)))))
 
-(defn diagram->svg [diagram & {:keys [mindra-path
-                                      width
-                                      height]
-                               :or {mindra-path "mindra"
-                                    width 512
-                                    height 512}}]
+(defn diagram->svg
+  "Converts a diagram into SVG string using mindra.
+
+  Options:
+  :mindra-path -- path to mindra command (defaults to 'mindra')
+  :width -- width of svg to create
+  :height -- height of svg to create
+
+  Returns SVG as a string."
+  [diagram & {:keys [mindra-path
+                     width
+                     height]
+              :or {mindra-path "mindra"
+                   width 512
+                   height 512}}]
   (let [configuration {:mindra-path mindra-path
                        :width width
                        :height height}
@@ -153,8 +193,18 @@
           (recur (read-message reader))
           message-body)))))
 
-(defn gloss-draw [picture
-                  & {:as provided-opts}]
+(defn gloss-draw
+  "Draws a gloss picture.
+
+  See https://hackage.haskell.org/package/gloss-1.13.2.1/docs/Graphics-Gloss-Interface-IO-Display.html
+
+  Options:
+  :mindra-path -- path to mindra command (defaults to 'mindra')
+  :window -- a map with :width, :height, :x, :y and :title keys for configuring the GUI window
+             (defaults to 512, 512, 10, 10, 'Mindra')
+  :background-color -- a map with :red, :green, :blue, :alpha keys for setting the background color
+                       (defaults to 255, 255, 255, 255)"
+  [picture & {:as provided-opts}]
   (let [default-configuration {:mindra-path "mindra"
                                :window {:width 512
                                         :height 512
@@ -184,7 +234,24 @@
         (when (and (not= message-body "PHOTO") (.isAlive ^java.lang.Process (:proc p)))
           (recur (read-message reader)))))))
 
-(defn gloss-play [world & {:as provided-opts}]
+(defn gloss-play
+  "Plays a gloss animation starting with given initial state (the world).
+
+  See https://hackage.haskell.org/package/gloss-1.13.2.1/docs/Graphics-Gloss-Interface-IO-Game.html
+
+  Options:
+  :mindra-path -- path to mindra command (defaults to 'mindra')
+  :on-step -- function that takes in world and number of seconds elasped; called on every step
+  :on-event -- function that takes in world and a map describing the event; called whenever an event fires
+  :on-exit -- function that takes in world; called when the gloss window is closed
+  :exit-event? -- a predicate function that takes in an event and decides if it is an exit event
+                  (by default hitting `ESC` key is an exit event)
+  :world->picture -- a function that converts world to a gloss picture
+                     (defaults to creating a rectangle of size 100 x 100)
+  :window -- a map with :width, :height, :x, :y and :title keys for configuring the GUI window
+             (defaults to 512, 512, 10, 10, 'Mindra')
+  :steps-per-second -- number of steps per second (defaults to 50)"
+  [world & {:as provided-opts}]
   (let [default-configuration {:mindra-path "mindra"
                                :on-step (constantly true)
                                :on-event #(println %2)

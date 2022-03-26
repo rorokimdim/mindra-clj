@@ -6,7 +6,6 @@
 
   :plugins [[cider/cider-nrepl "0.28.1"]
             [mx.cider/enrich-classpath "1.5.2"]
-            [lein-ancient "1.0.0-RC3"]
             [lein-shell "0.5.0"]]
 
   :dependencies [[org.clojure/clojure "1.10.1"]

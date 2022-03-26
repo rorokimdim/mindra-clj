@@ -8,6 +8,5 @@
 
             [criterium.core :as criterium]
 
-            [mindra.core :refer [gloss-draw gloss-play diagram->svg]]
             [mindra.examples.diagrams :as ed]
             [mindra.examples.gloss :as eg]))

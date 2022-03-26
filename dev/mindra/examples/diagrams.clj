@@ -129,7 +129,7 @@
                            (md/line-color 100 10 0 100)
                            (md/translate x y))) $)
                (apply md/superimpose $)
-               (diagram->svg $ :width 500 :height 500))]
+               (diagram->svg $ :width width :height height))]
      (write-svg file-path svg))))
 
 (defn draw-hilbert-pattern
@@ -215,9 +215,8 @@
      (write-svg file-path svg))))
 
 (defn draw-bspline
-  ([] (draw-bspline false))
-  ([closed?] (draw-bspline default-svg-path closed?))
-  ([file-path closed?]
+  ([] (draw-bspline default-svg-path))
+  ([file-path]
    (let [svg (diagram->svg (->> [[0 0] [5 5] [10 0] [15 15] [20 0] [30 30]]
                                 (md/bspline)
                                 (md/line-color 150 0 0 200)))]

@@ -1,12 +1,14 @@
 (ns mindra.gloss
-  (:require [clojure.string :as s]
-            [mindra.common :refer [sep vstr]]))
+  (:require [mindra.common :refer [sep vstr]]))
 
 ;;
 ;; All functions should closely match
 ;; https://hackage.haskell.org/package/gloss-1.13.2.1/docs/Graphics-Gloss-Data-Picture.html#t:Picture
 ;;
 ;; All the docstrings were mostly copied over from the same location.
+;;
+;; See https://github.com/rorokimdim/mindra/blob/master/src/Mindra/Gloss/Parser/Picture.hs
+;; for how minda will parse the constructed string.
 ;;
 
 (defn arc
