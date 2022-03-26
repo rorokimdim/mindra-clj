@@ -128,7 +128,7 @@
                       (->> (md/circle r)
                            (md/line-color 100 10 0 100)
                            (md/translate x y))) $)
-               (apply md/superimpose $)
+               (md/superimpose $)
                (diagram->svg $ :width width :height height))]
      (write-svg file-path svg))))
 
@@ -172,7 +172,7 @@
                       (->> (md/rectangle n n)
                            (md/translate x y)
                            (md/line-color 0 0 200 200))) $)
-               (apply md/superimpose $)
+               (md/superimpose $)
                (diagram->svg $ :window {:width (+ width 50) :height (+ height 50)}))]
      (write-svg file-path svg))))
 
