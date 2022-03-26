@@ -1,3 +1,8 @@
+[![Clojars Project](https://img.shields.io/clojars/v/org.clojars.rorokimdim/mindra.svg)](https://clojars.org/org.clojars.rorokimdim/mindra)
+[![cljdoc badge](https://cljdoc.org/badge/org.clojars.rorokimdim/mindra)](https://cljdoc.org/d/org.clojars.rorokimdim/mindra)
+[![CircleCI](https://circleci.com/gh/rorokimdim/mindra-clj/tree/master.svg?style=svg)](https://circleci.com/gh/rorokimdim/mindra-clj/tree/master)
+[![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
+
 `Note: Alpha status. Each new version might have breaking changes.`
 
 # mindra-clj
