@@ -155,20 +155,25 @@ Please check out <a href="http://gloss.ouroborus.net/">gloss.ouroborus.net</a> t
 
 A good subset of the features provided by `gloss` is already supported.
 
+**A.** Basic drawing
+
 <img src="images/gloss/draw-basic.png" width="400"/>
 
 <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/gloss.clj#L8">source</a> (images used obtained from [dumbmanex.com](https://github.com/rorokimdim/mindra-clj/blob/master/images/dumbmanex.com/credits.txt))
 
+**B.** Hilbert curve animation
 
 https://user-images.githubusercontent.com/929342/160046861-e0f61455-adc0-48c8-8882-ddef80f55d18.mov
 
-
 <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/gloss.clj#L186">source</a> (images obtained from [dumbmanex.com](https://github.com/rorokimdim/mindra-clj/blob/master/images/dumbmanex.com/credits.txt))
+
+**C.** Snowballer animation
 
 https://user-images.githubusercontent.com/929342/160048147-2fc39ea7-feb1-409e-adb1-288a869fe4ff.mov
 
-
 <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/gloss.clj#L139">source</a>
+
+**D.** Simple animation with event handling
 
 https://user-images.githubusercontent.com/929342/160048948-8acfbca6-63c7-4cfe-9adb-e3418b414807.mov
 
