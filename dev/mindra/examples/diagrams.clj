@@ -224,11 +224,11 @@
      (write-svg file-path svg))))
 
 (defn draw-sine
-  ([] (draw-plot default-svg-path
+  ([] (draw-sine default-svg-path
                  (for [x (range (* -3 Math/PI) (* 3 Math/PI) 0.4)
                        :let [y (* 5 (Math/sin x))]]
                    [x y])))
-  ([points] (draw-plot default-svg-path points))
+  ([points] (draw-sine default-svg-path points))
   ([file-path points]
    (let [marker (->> (md/circle 0.2)
                      (md/line-color 0 100 0 200)
