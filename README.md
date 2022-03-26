@@ -80,7 +80,7 @@ A good subset of the features provided by `gloss` is already supported.
 https://user-images.githubusercontent.com/929342/160046861-e0f61455-adc0-48c8-8882-ddef80f55d18.mov
 
 
-<a href="https://github.com/rorokimdim/mindra-clj/blob/c4321a9dee1bf35c18ebedcf1f90bca3e5e9eda1/dev/mindra/examples/gloss.clj#L186">source</a>
+<a href="https://github.com/rorokimdim/mindra-clj/blob/c4321a9dee1bf35c18ebedcf1f90bca3e5e9eda1/dev/mindra/examples/gloss.clj#L186">source</a> (images obtained from [dumbmanex.com](https://github.com/rorokimdim/mindra-clj/blob/master/images/dumbmanex.com/credits.txt))
 
 https://user-images.githubusercontent.com/929342/160048147-2fc39ea7-feb1-409e-adb1-288a869fe4ff.mov
 
