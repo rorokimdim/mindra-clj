@@ -439,9 +439,53 @@
   [& points]
   (line points))
 
+(defn triangle
+  "An equilateral triangle, with sides of the given length and base parallel to the x-axis.
+
+  See https://hackage.haskell.org/package/diagrams-lib/docs/Diagrams-TwoD-Shapes.html"
+  [n]
+  (sep "Triangle" n))
+
+(defn polygon-regular
+  "A regular polygon with n sides, each of given length."
+  [n length]
+  (sep "PolygonRegular" n length))
+
+(defn polygon-polar
+  "A polar polygon with given list of central angles (in degrees) and given list of radii.
+
+  See https://hackage.haskell.org/package/diagrams-lib/docs/Diagrams-TwoD-Polygons.html#g:1"
+  [angles radii]
+  (sep "PolygonPolar" (vstr angles) (vstr radii)))
+
+(defn polygon-sides
+  "A polygon with given list of external angles (in degrees) and given lengths.
+
+  See https://hackage.haskell.org/package/diagrams-lib/docs/Diagrams-TwoD-Polygons.html#g:1"
+  [angles lengths]
+  (sep "PolygonSides" (vstr angles) (vstr lengths)))
+
 ;;
 ;; Transformations
 ;;
+
+(defn reflect-x
+  "Flip the x-coordinates of points in a diagram.
+
+  Maps (x, y) to (-x, y)
+
+  See https://hackage.haskell.org/package/diagrams-lib/docs/Diagrams-TwoD-Transform.html#g:5"
+  [diagram]
+  (sep "ReflectX" diagram))
+
+(defn reflect-y
+  "Flip the y-coordinates of points in a diagram.
+
+  Maps (x, y) to (x, -y)
+
+  See https://hackage.haskell.org/package/diagrams-lib/docs/Diagrams-TwoD-Transform.html#g:5"
+  [diagram]
+  (sep "ReflectY" diagram))
 
 (defn rotate
   "A diagram rotated anticlockwise by the given angle (in degrees)."

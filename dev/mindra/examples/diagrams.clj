@@ -205,6 +205,19 @@
                                 (md/show-envelope)))]
      (write-svg file-path svg))))
 
+(defn draw-polygons
+  ([] (draw-polygons default-svg-path))
+  ([file-path]
+   (let [ps (md/vsep' 1
+                      (md/polygon-regular 5 2)
+                      (md/polygon-regular 10 2)
+                      (md/polygon-sides [20 30 80 60] [1 2 3 4])
+                      (md/polygon-polar [20 60 90 120] [1 1 1 1]))
+         svg (diagram->svg (md/hsep' 1
+                                     ps
+                                     (md/reflect-x ps)))]
+     (write-svg file-path svg))))
+
 (defn draw-cubic-spline
   ([] (draw-cubic-spline false))
   ([closed?] (draw-cubic-spline default-svg-path closed?))
