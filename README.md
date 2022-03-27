@@ -116,7 +116,7 @@ Only a small subset of the features provided by `diagrams` is supported at this 
     </td>
     <td>
     <img src="images/diagrams/draw-tower.svg" width="200"/>
-    <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L91">source</a>
+    <a href="https://github.com/rorokimdim/mindra-clj/blob/52fd2a23c064a5b1bad1fce33d42f8c8c384780b/dev/mindra/examples/diagrams.clj#L91">source</a>
     </td>
     <td>
       <img src="images/diagrams/draw-basic.svg" width="200"/>
