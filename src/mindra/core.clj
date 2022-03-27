@@ -98,11 +98,20 @@
   "Handles initialization request from mindra for setting it up for Gloss."
   [writer configuration]
   (let [mode (:mode configuration MINDRA-MODE-GLOSS-STATIC)
+        full-screen? (:full-screen? configuration)
         window (:window configuration)
         color (:background-color configuration)
         steps-per-second (:steps-per-second configuration 50)
         no-event (:no-event configuration)
-        no-step (:no-step configuration)]
+        no-step (:no-step configuration)
+        window-cfg (if full-screen?
+                     "FullScreen"
+                     (s/join " " (list "Window"
+                                       (:width window 512)
+                                       (:height window 512)
+                                       (:x window 10)
+                                       (:y window 10)
+                                       (str "\"" (:title window "Mindra") "\""))))]
     (write-message writer
                    "INIT"
                    (s/join
@@ -110,12 +119,7 @@
                     (list "Gloss"
                           "Mode"
                           mode
-                          "Window"
-                          (:width window 512)
-                          (:height window 512)
-                          (:x window 10)
-                          (:y window 10)
-                          (str "\"" (:title window "Mindra") "\"")
+                          window-cfg
                           "Color"
                           (:red color 255)
                           (:green color 255)
@@ -219,12 +223,15 @@
 
   Options:
   :mindra-path -- path to mindra command (defaults to 'mindra')
+  :full-screen? Whether gloss should start in full-screen mode
+                (defaults to false. If true, then :window option is ignored)
   :window -- a map with :width, :height, :x, :y and :title keys for configuring the GUI window
-             (defaults to 512, 512, 10, 10, 'Mindra')
+             (defaults to 512, 512, 10, 10, 'Mindra'. Ignored if :full-screen? is set to true)
   :background-color -- a map with :red, :green, :blue, :alpha keys for setting the background color
                        (defaults to 255, 255, 255, 255)"
   [picture & {:as provided-opts}]
   (let [default-configuration {:mindra-path "mindra"
+                               :full-screen? false
                                :window {:width 512
                                         :height 512
                                         :x 10
@@ -267,8 +274,10 @@
                   (by default hitting `ESC` key is an exit event)
   :world->picture -- a function that converts world to a gloss picture
                      (defaults to creating a rectangle of size 100 x 100)
+  :full-screen? Whether gloss should start in full-screen mode
+                (defaults to false. If true, then :window option is ignored)
   :window -- a map with :width, :height, :x, :y and :title keys for configuring the GUI window
-             (defaults to 512, 512, 10, 10, 'Mindra')
+             (defaults to 512, 512, 10, 10, 'Mindra'. Ignored if :full-screen? is set to true)
   :steps-per-second -- number of steps per second (defaults to 50)"
   [world & {:as provided-opts}]
   (let [default-configuration {:mindra-path "mindra"
