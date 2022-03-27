@@ -8,5 +8,6 @@
 
             [criterium.core :as criterium]
 
+            [mindra.core :as m]
             [mindra.examples.diagrams :as ed]
             [mindra.examples.gloss :as eg]))

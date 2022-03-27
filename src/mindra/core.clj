@@ -160,6 +160,15 @@
                       "Please install mindra and provide the correct path to it using :mindra-path option -- defaults to 'mindra'."))
         (System/exit 1)))))
 
+(defn mindra-version
+  "Gets version of the installed mindra binary."
+  ([] (mindra-version "mindra"))
+  ([mindra-path]
+   (-> (bp/process [mindra-path "-v"] {:out :string})
+       bp/check
+       :out
+       s/trim)))
+
 (defn diagram->svg
   "Converts a diagram into SVG string using mindra.
 
