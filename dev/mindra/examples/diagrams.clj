@@ -99,9 +99,9 @@
                          (md/fill-color 0 0 100 100))
          tiny-square (md/rectangle 2.5 2.5)
          little-square (md/rectangle 5 5)
-         big-square (md/rectangle 10 10)
+         big-rounded-square (md/rounded-rectangle 10 10 1)
          circles (md/cat 1 0 [tiny-circle little-circle big-circle])
-         squares (md/hcat [tiny-square little-square big-square])
+         squares (md/hcat [tiny-square little-square big-rounded-square])
          structure (md/beside 1 0 circles squares)
          svg (diagram->svg (->> structure
                                 (md/rotate -45)
