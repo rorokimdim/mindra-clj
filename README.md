@@ -21,13 +21,13 @@ If you encounter any problems, please file an issue.
 **Leiningen/Boot**
 
 ```clojure
-[org.clojars.rorokimdim/mindra-clj "0.0.2"]
+[org.clojars.rorokimdim/mindra-clj "0.0.3"]
 ```
 
 **deps.edn**
 
 ```clojure
-org.clojars.rorokimdim/mindra-clj {:mvn/version "0.0.2"}
+org.clojars.rorokimdim/mindra-clj {:mvn/version "0.0.3"}
 ```
 
 # Usage
