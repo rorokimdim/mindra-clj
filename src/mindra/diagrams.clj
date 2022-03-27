@@ -388,6 +388,18 @@
   [width height]
   (sep "Rectangle" width height))
 
+(defn rounded-rectangle
+  "A rectangle of given width and height with circular rounded corners of given radius.
+
+  If radius is negative the corner will be cut out in a reverse arc.
+
+  If radius is larger than half the smaller dimension of width and height, then it will be reduced to fit in that range,
+  to prevent the corners from overlapping.
+
+  See https://hackage.haskell.org/package/diagrams-lib/docs/Diagrams-TwoD-Shapes.html#g:4"
+  [width height radius]
+  (sep "RoundedRectangle" width height radius))
+
 (defn square
   "A square of given length."
   [n]
