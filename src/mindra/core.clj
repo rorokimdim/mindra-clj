@@ -148,26 +148,36 @@
     "SVG" (handle-svg-request writer configuration svg)
     (throw (AssertionError. (str "Unexpected READY message received: " message-body)))))
 
+(defn print-mindra-startup-failure
+  "Prints a helpful message when mindra command fails to start."
+  [mindra-path]
+  (println (str "😱 Failed to start mindra from path '" mindra-path "'"))
+  (println
+   (str \newline
+        "Please install mindra and provide the correct path to it using "
+        ":mindra-path option -- defaults to 'mindra'.")))
+
 (defn start-mindra-or-fail
   "Starts mindra command from given command or fails with a helpful error message."
   [path]
   (try
     (bp/process [path] {:shutdown bp/destroy})
-    (catch java.io.IOException _
-      (do
-        (println (str "😱 Failed to start mindra from path '" path "'"))
-        (println (str \newline
-                      "Please install mindra and provide the correct path to it using :mindra-path option -- defaults to 'mindra'."))
-        (System/exit 1)))))
+    (catch java.io.IOException e
+      (print-mindra-startup-failure path)
+      (throw e))))
 
 (defn mindra-version
   "Gets version of the installed mindra binary."
   ([] (mindra-version "mindra"))
   ([mindra-path]
-   (-> (bp/process [mindra-path "-v"] {:out :string})
-       bp/check
-       :out
-       s/trim)))
+   (try
+     (-> (bp/process [mindra-path "-v"] {:out :string})
+         bp/check
+         :out
+         s/trim)
+     (catch java.io.IOException e
+       (print-mindra-startup-failure mindra-path)
+       (throw e)))))
 
 (defn diagram->svg
   "Converts a diagram into SVG string using mindra.
