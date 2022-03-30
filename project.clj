@@ -1,4 +1,4 @@
-(defproject org.clojars.rorokimdim/mindra "0.0.3"
+(defproject org.clojars.rorokimdim/mindra "0.0.4"
   :description "A clojure client library for mindra."
   :url "https://github.com/rorokimdim/mindra-clj"
   :license {:name "MIT License"
