@@ -64,6 +64,8 @@ Try drawing a simple circle in a repl:
 
 Hit `ESC` to close the window. See [default-key-bindings](https://github.com/benl23x5/gloss#usage).
 
+Next, checkout the [examples](https://github.com/rorokimdim/mindra-clj#examples).
+
 # Q/A
 
 **A.** How does it compare with library x?
@@ -98,58 +100,58 @@ Only a small subset of the features provided by `diagrams` is supported at this 
   <tr>
     <td>
       <img src="images/diagrams/draw-hilbert-pattern.svg" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L135">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L130">source</a>
     </td>
     <td>
       <img src="images/diagrams/draw-circle-pattern.png" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L121">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L118">source</a>
     </td>
     <td>
       <img src="images/diagrams/draw-square-pattern.png" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L165">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L160">source</a>
     </td>
   </tr>
   <tr>
     <td>
       <img src="images/diagrams/draw-sine.svg" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L225">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L232">source</a>
     </td>
     <td>
     <img src="images/diagrams/draw-tower.svg" width="200"/>
-    <a href="https://github.com/rorokimdim/mindra-clj/blob/52fd2a23c064a5b1bad1fce33d42f8c8c384780b/dev/mindra/examples/diagrams.clj#L91">source</a>
+    <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L86">source</a>
     </td>
     <td>
       <img src="images/diagrams/draw-basic.svg" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L16">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L12">source</a>
     </td>
   </tr>
     <tr>
     <td>
       <img src="images/diagrams/draw-rectangle.svg" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L195">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L187">source</a>
     </td>
     <td>
     <img src="images/diagrams/draw-tree-pattern.png" width="200"/>
-    <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L179">source</a>
+    <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L173">source</a>
     </td>
     <td>
       <img src="images/diagrams/draw-arrows.svg" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L44">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L39">source</a>
     </td>
   </tr>
     </tr>
     <tr>
     <td>
       <img src="images/diagrams/draw-line-pattern.svg" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L148">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L143">source</a>
     </td>
     <td>
       <img src="images/diagrams/draw-circle.svg" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L111">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L107">source</a>
     </td>
     <td>
       <img src="images/diagrams/draw-bspline.svg" width="200"/>
-      <a href="https://github.com/rorokimdim/mindra-clj/blob/f5b787a9c7be6784bbc3eac953723d87e3ca2130/dev/mindra/examples/diagrams.clj#L217">source</a>
+      <a href="https://github.com/rorokimdim/mindra-clj/blob/0707467c4b0822b7173c5df8bf05edba94b8005c/dev/mindra/examples/diagrams.clj#L223">source</a>
     </td>
   </tr>
 </table>
