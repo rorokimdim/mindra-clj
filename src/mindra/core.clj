@@ -8,14 +8,18 @@
 (def MINDRA-MODE-GLOSS-STATIC 0)
 (def MINDRA-MODE-GLOSS-INTERACTIVE 1)
 
-(defn print-and-raise-mindra-failure
+;;
+;; Private functions first. All public functions are at the bottom.
+;;
+
+(defn- print-and-raise-mindra-failure
   "Prints and raises a failure message from mindra."
   [tag body]
   (println body)
   (throw (AssertionError.
           (str "Unexpected message received from mindra, with tag '" tag "'."))))
 
-(defn read-message
+(defn- read-message
   "Reads a message sent by mindra."
   [^java.io.BufferedReader reader]
   (let [line (.readLine reader)]
@@ -29,7 +33,7 @@
               body (second splits)]
           {:tag tag :body body})))))
 
-(defn write-message
+(defn- write-message
   "Writes a message to mindra's stdin."
   ([^java.io.BufferedWriter writer tag] (write-message writer tag nil))
   ([^java.io.BufferedWriter writer tag body]
@@ -39,7 +43,7 @@
    (.write writer (str \newline \newline))
    (.flush writer)))
 
-(defn default-exit-event?
+(defn- default-exit-event?
   "Default predicate function to decide if an event is an exit-event.
 
   ESC key is the default way to exit."
@@ -47,7 +51,7 @@
   (and (= (:name event) "EventKey")
        (= (first (:args event)) :specialKeyEsc)))
 
-(defn parse-event
+(defn- parse-event
   "Parses an event message from mindra to a dict with :name and :args."
   [message-body]
   (let [splits (s/split message-body #"\s+")
@@ -56,7 +60,7 @@
     {:name event-name
      :args event-args}))
 
-(defn handle-event
+(defn- handle-event
   "Handles an event message sent by mindra."
   [writer configuration world event]
   (if ((:exit-event? configuration) event)
@@ -65,36 +69,55 @@
       ((:on-event configuration) world event)
       (write-message writer "OK"))))
 
-(defn handle-step
+(defn- handle-step
   "Handles a step message sent by mindra."
   [writer configuration world message-body]
   (let [seconds (Float/parseFloat message-body)]
     ((:on-step configuration) world seconds)
     (write-message writer "OK")))
 
-(defn handle-picture-request
+(defn- handle-picture-request
   "Handles a picture request message sent by mindra."
   [writer configuration world]
   (let [picture ((:world->picture configuration) world)]
     (write-message writer "PICTURE" picture)))
 
-(defn handle-svg-request
+(defn- handle-svg-request
   "Handles a SVG request message sent by mindra."
-  [writer _configuration svg]
-  (write-message writer "SVG" svg))
+  [writer _configuration diagram]
+  (write-message writer "SVG" diagram))
 
-(defn handle-svg-init-request
+(defn- handle-raster-request
+  "Handles a RASTER request message sent by mindra."
+  [writer _configuration diagram]
+  (write-message writer "RASTER" diagram))
+
+(defn- handle-svg-init-request
   "Handles initialization request from mindra for setting it up for SVG drawing."
   [writer configuration]
   (let [width (:width configuration)
-        height (:height configuration)]
+        height (:height configuration)
+        file-path (:file-path configuration)
+        file-path-str (if (nil? file-path) nil (pr-str file-path))]
     (write-message writer
                    "INIT"
                    (s/join
                     " "
-                    (list "Diagrams" "SVG" width height)))))
+                    (list "Diagrams" "SVG" width height file-path-str)))))
 
-(defn handle-gloss-init-request
+(defn- handle-raster-init-request
+  "Handles initialization request from mindra for setting it up for SVG drawing."
+  [writer configuration]
+  (let [width (:width configuration)
+        height (:height configuration)
+        file-path (:file-path configuration)]
+    (write-message writer
+                   "INIT"
+                   (s/join
+                    " "
+                    (list "Diagrams" "Raster" width height (pr-str file-path))))))
+
+(defn- handle-gloss-init-request
   "Handles initialization request from mindra for setting it up for Gloss."
   [writer configuration]
   (let [mode (:mode configuration MINDRA-MODE-GLOSS-STATIC)
@@ -111,7 +134,7 @@
                                        (:height window 512)
                                        (:x window 10)
                                        (:y window 10)
-                                       (str "\"" (:title window "Mindra") "\""))))]
+                                       (pr-str (:title window "Mindra")))))]
     (write-message writer
                    "INIT"
                    (s/join
@@ -130,13 +153,13 @@
                           (when no-event "NoEvent")
                           (when no-step "NoStep"))))))
 
-(defn handle-shutdown
+(defn- handle-shutdown
   "Handles shutdown message from mindra."
   [writer configuration world]
   ((:on-exit configuration) world)
   (write-message writer "OK"))
 
-(defn handle-gloss-ready
+(defn- handle-gloss-ready
   "Handles ready message from mindra for Gloss."
   [writer configuration world message-body]
   (case message-body
@@ -144,7 +167,7 @@
     "PICTURE" (handle-picture-request writer configuration world)
     (throw (AssertionError. (str "Unexpected READY message received: " message-body)))))
 
-(defn handle-svg-ready
+(defn- handle-svg-ready
   "Handles ready message from mindra for SVG drawings."
   [writer configuration svg message-body]
   (case message-body
@@ -152,7 +175,15 @@
     "SVG" (handle-svg-request writer configuration svg)
     (throw (AssertionError. (str "Unexpected READY message received: " message-body)))))
 
-(defn print-mindra-startup-failure
+(defn- handle-raster-ready
+  "Handles ready message from mindra for raster image drawings."
+  [writer configuration diagram message-body]
+  (case message-body
+    "INIT" (handle-raster-init-request writer configuration)
+    "RASTER" (handle-raster-request writer configuration diagram)
+    (throw (AssertionError. (str "Unexpected READY message received: " message-body)))))
+
+(defn- print-mindra-startup-failure
   "Prints a helpful message when mindra command fails to start."
   [mindra-path]
   (println (str "😱 Failed to start mindra from path '" mindra-path "'"))
@@ -161,7 +192,7 @@
         "Please install mindra and provide the correct path to it using "
         ":mindra-path option -- defaults to 'mindra'.")))
 
-(defn start-mindra-or-fail
+(defn- start-mindra-or-fail
   "Starts mindra command from given command or fails with a helpful error message."
   [path]
   (try
@@ -215,6 +246,44 @@
         (if (and (not= tag "SVG") (.isAlive ^java.lang.Process (:proc p)))
           (recur (read-message reader))
           message-body)))))
+
+(defn diagram->file
+  "Writes diagram to a file on disk.
+
+  The file-type is determined by the file-extension. The following
+  file-extensions are supported: svg, png, tif, bmp, jpg, pdf. If file-type
+  cannot be determined, mindra will assume png.
+
+  Returns path of file written to."
+  [diagram file-path & {:keys [mindra-path
+                               width
+                               height]
+                        :or {mindra-path "mindra"
+                             width 512
+                             height 512}}]
+  (let [configuration {:mindra-path mindra-path
+                       :width width
+                       :height height
+                       :file-path file-path}
+        p (start-mindra-or-fail mindra-path)
+        reader (io/reader (:out p))
+        writer (io/writer (:in p))
+        ext (last (s/split file-path #"\."))
+        ready-fn (if (= "svg" ext) handle-svg-ready handle-raster-ready)]
+    (loop [message (read-message reader)]
+      (let [tag (:tag message)
+            message-body (:body message)]
+        (case tag
+          nil true
+          "READY" (ready-fn writer configuration diagram message-body)
+          "SVG" true
+          "RASTER" true
+          (print-and-raise-mindra-failure tag message-body))
+        (if (and (not= tag "SVG")
+                 (not= tag "RASTER")
+                 (.isAlive ^java.lang.Process (:proc p)))
+          (recur (read-message reader))
+          file-path)))))
 
 (defn gloss-draw
   "Draws a gloss picture.
@@ -316,3 +385,34 @@
             (print-and-raise-mindra-failure tag message-body)))
         (when (and (not= tag "SHUTDOWN") (.isAlive ^java.lang.Process (:proc p)))
           (recur (read-message reader)))))))
+
+(defn show-diagram
+  "A convenience function to show a diagram in a gloss window.
+
+  Requires mindra v0.0.3 or higher.
+
+  It writes a bmp file to a temp file and then loads it in gloss window.
+
+  This function accepts the same options as gloss-draw function."
+  [diagram & {:keys [mindra-path
+                     full-screen?
+                     window
+                     background-color]
+              :or {mindra-path "mindra"
+                   full-screen? false
+                   window {:width 512 :height 512 :x 10 :y 10 :title "Mindra"}
+                   background-color {:red 255 :green 255 :blue 255 :alpha 255}}}]
+  (let [tmp-file (java.io.File/createTempFile "mindra" ".bmp")
+        _ (.deleteOnExit tmp-file)
+        tmp-file-path (.getAbsolutePath tmp-file)
+        file-path (diagram->file diagram tmp-file-path
+                                 :mindra-path mindra-path
+                                 :width (:width window)
+                                 :height (:height window))
+        picture (str "Image" " " (pr-str file-path))]
+    (gloss-draw picture
+                :mindra-path mindra-path
+                :full-screen? full-screen?
+                :window window
+                :background-color background-color)
+    (.delete tmp-file)))
