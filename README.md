@@ -46,6 +46,9 @@ Try drawing a simple circle in a repl:
   (let [svg (diagram->svg (md/circle radius))]
     (spit "circle.svg" svg)))
 
+; Writes to "circle.svg" file.
+; For other formats, try mindra.core/diagram->file.
+; For displaying the image in a gui window, try mindra.core/show-diagram
 (draw-circle 100)
 ```
 
